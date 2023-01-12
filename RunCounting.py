@@ -12,18 +12,33 @@ import threading
 from itertools import zip_longest
 from flask import Response
 from flask import Flask
-from flask import render_template
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 
 t0 = time.time()
 
 outputFrame = None
+people_count = 0
 lock = threading.Lock()
 # initialize a flask object
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+@app.route("/counter")
+@cross_origin()
+def counter():
+	# return the rendered template
+	global people_count
+	return jsonify(people_count)
+
+@app.route("/video")
+@cross_origin()
+def video_feed():
+	# return the response generated along with the specific media
+	# type (mime type)
+	return Response(generate(),
+					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
 def run(args):
 	global outputFrame, lock, people_count
@@ -333,14 +348,14 @@ def run(args):
 				break
 
 	# stop the timer and display FPS information
-	fps.stop()
-	print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
-	print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+	# fps.stop()
+	# print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+	# print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
 
 	# # if we are not using a video file, stop the camera video stream
-	# if not args.get("input", False):
-	# 	vs.stop()
+	if not args.get("input", False):
+		vs.stop()
 	#
 	# # otherwise, release the video file pointer
 	# else:
@@ -373,20 +388,7 @@ def generate():
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
 			  bytearray(encodedImage) + b'\r\n')
 
-@app.route("/counter")
-@cross_origin()
-def stats():
-	# return the rendered template
-	global people_count
-	return jsonify(people_count)
 
-@app.route("/video_feed")
-@cross_origin()
-def video_feed():
-	# return the response generated along with the specific media
-	# type (mime type)
-	return Response(generate(),
-					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
