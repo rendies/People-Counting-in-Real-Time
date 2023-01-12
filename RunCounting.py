@@ -40,7 +40,7 @@ def video_feed():
 	return Response(generate(),
 					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
-def run(args):
+def PeopleCounter(args):
 	global outputFrame, lock, people_count
 	# construct the argument parse and parse the arguments
 	# ap = argparse.ArgumentParser()
@@ -328,7 +328,7 @@ def run(args):
 		# show the output frame
 		with lock:
 			outputFrame = frame.copy()
-		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
+		cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
 		key = cv2.waitKey(1) & 0xFF
 
 		# if the `q` key was pressed, break from the loop
@@ -413,7 +413,7 @@ if __name__ == '__main__':
 					help="# of skip frames between detections")
 	args = vars(ap.parse_args())
 	# start a thread that will perform motion detection
-	t = threading.Thread(target=run, args=(args))
+	t = threading.Thread(target=PeopleCounter, args=(args))
 	t.daemon = True
 	t.start()
 	# start the flask app
