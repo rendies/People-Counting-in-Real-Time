@@ -24,6 +24,7 @@ lock = threading.Lock()
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+args = None
 
 @app.route("/counter")
 @cross_origin()
@@ -40,7 +41,7 @@ def video_feed():
 	return Response(generate(),
 					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
-def PeopleCounter(args):
+def PeopleCounter():
 	global outputFrame, lock, people_count
 	# construct the argument parse and parse the arguments
 	# ap = argparse.ArgumentParser()
@@ -413,7 +414,7 @@ if __name__ == '__main__':
 					help="# of skip frames between detections")
 	args = vars(ap.parse_args())
 	# start a thread that will perform motion detection
-	t = threading.Thread(target=PeopleCounter, args=(args))
+	t = threading.Thread(target=PeopleCounter)
 	t.daemon = True
 	t.start()
 	# start the flask app
