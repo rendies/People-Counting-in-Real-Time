@@ -25,24 +25,24 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-def run():
+def run(args):
 	global outputFrame, lock, people_count
 	# construct the argument parse and parse the arguments
-	ap = argparse.ArgumentParser()
-	ap.add_argument("-p", "--prototxt", required=False,
-		help="path to Caffe 'deploy' prototxt file")
-	ap.add_argument("-m", "--model", required=True,
-		help="path to Caffe pre-trained model")
-	ap.add_argument("-i", "--input", type=str,
-		help="path to optional input video file")
-	ap.add_argument("-o", "--output", type=str,
-		help="path to optional output video file")
-	# confidence default 0.4
-	ap.add_argument("-c", "--confidence", type=float, default=0.4,
-		help="minimum probability to filter weak detections")
-	ap.add_argument("-s", "--skip-frames", type=int, default=30,
-		help="# of skip frames between detections")
-	args = vars(ap.parse_args())
+	# ap = argparse.ArgumentParser()
+	# ap.add_argument("-p", "--prototxt", required=False,
+	# 	help="path to Caffe 'deploy' prototxt file")
+	# ap.add_argument("-m", "--model", required=True,
+	# 	help="path to Caffe pre-trained model")
+	# ap.add_argument("-i", "--input", type=str,
+	# 	help="path to optional input video file")
+	# ap.add_argument("-o", "--output", type=str,
+	# 	help="path to optional output video file")
+	# # confidence default 0.4
+	# ap.add_argument("-c", "--confidence", type=float, default=0.4,
+	# 	help="minimum probability to filter weak detections")
+	# ap.add_argument("-s", "--skip-frames", type=int, default=30,
+	# 	help="# of skip frames between detections")
+	# args = vars(ap.parse_args())
 
 	# initialize the list of class labels MobileNet SSD was trained to
 	# detect
@@ -392,13 +392,26 @@ def video_feed():
 if __name__ == '__main__':
 	# construct the argument parser and parse command line arguments
 	ap = argparse.ArgumentParser()
-	ap.add_argument("-i", "--ip", type=str, default="0.0.0.0",
+	ap.add_argument("-t", "--ip", type=str, default="0.0.0.0",
 					help="ip address of the device")
-	ap.add_argument("-o", "--port", type=int, default=8081,
+	ap.add_argument("-u", "--port", type=int, default=8081,
 					help="ephemeral port number of the server (1024 to 65535)")
+	ap.add_argument("-p", "--prototxt", required=False,
+					help="path to Caffe 'deploy' prototxt file")
+	ap.add_argument("-m", "--model", required=True,
+					help="path to Caffe pre-trained model")
+	ap.add_argument("-i", "--input", type=str,
+					help="path to optional input video file")
+	ap.add_argument("-o", "--output", type=str,
+					help="path to optional output video file")
+	# confidence default 0.4
+	ap.add_argument("-c", "--confidence", type=float, default=0.4,
+					help="minimum probability to filter weak detections")
+	ap.add_argument("-s", "--skip-frames", type=int, default=30,
+					help="# of skip frames between detections")
 	args = vars(ap.parse_args())
 	# start a thread that will perform motion detection
-	t = threading.Thread(target=run)
+	t = threading.Thread(target=run, args=(args))
 	t.daemon = True
 	t.start()
 	# start the flask app
