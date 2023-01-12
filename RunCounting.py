@@ -290,7 +290,7 @@ def PeopleCounter():
 			cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 			cv2.circle(frame, (centroid[0], centroid[1]), 4, (255, 255, 255), -1)
-		people_count = totalUp
+		people_count = {counter: totalDown}
 		# construct a tuple of information we will be displaying on the
 		info = [
 		("Exit", totalUp),
@@ -329,7 +329,7 @@ def PeopleCounter():
 		# show the output frame
 		with lock:
 			outputFrame = frame.copy()
-		cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
+		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
 		key = cv2.waitKey(1) & 0xFF
 
 		# if the `q` key was pressed, break from the loop
