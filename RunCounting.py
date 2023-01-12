@@ -31,7 +31,7 @@ args = None
 def counter():
 	# return the rendered template
 	global people_count
-	return jsonify({"counter": people_count})
+	return jsonify([people_count, 1000, 980, 700, 500, 670, 567 ])
 
 @app.route("/video")
 @cross_origin()
