@@ -31,7 +31,7 @@ args = None
 def counter():
 	# return the rendered template
 	global people_count
-	return jsonify(people_count)
+	return jsonify({counter: people_count})
 
 @app.route("/video")
 @cross_origin()
@@ -290,7 +290,7 @@ def PeopleCounter():
 			cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 			cv2.circle(frame, (centroid[0], centroid[1]), 4, (255, 255, 255), -1)
-		people_count = {counter: totalDown}
+		people_count = totalDown
 		# construct a tuple of information we will be displaying on the
 		info = [
 		("Exit", totalUp),
