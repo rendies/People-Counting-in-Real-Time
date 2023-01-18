@@ -126,7 +126,7 @@ def PeopleCounter():
 
 	if config.Thread:
 		vs = thread.ThreadingClass(config.url)
-	ffmpeg_process = open_ffmpeg_stream_process(1080, 1920)
+	ffmpeg_process = open_ffmpeg_stream_process(480, 640)
 	# loop over frames from the video stream
 	while True:
 		# grab the next frame and handle if we are reading from either
@@ -142,7 +142,7 @@ def PeopleCounter():
 		# resize the frame to have a maximum width of 500 pixels (the
 		# less data we have, the faster we can process it), then convert
 		# the frame from BGR to RGB for dlib
-		frame = imutils.resize(frame, width = 500)
+		frame = imutils.resize(frame, width = 640)
 		rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 		# if the frame dimensions are empty, set them
