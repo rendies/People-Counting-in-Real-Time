@@ -5,14 +5,14 @@
 # e.g., 'email@gmail.com'
 MAIL = ''
 # Enter the ip camera url (e.g., url = 'http://191.138.0.100:8040/video')
-url = 'rtsp://admin:Asainfra333@172.17.0.60:554'
+url = 'rtsp://172.17.2.39/main'
 
 # ON/OFF for mail feature. Enter True to turn on the email alert feature.
 ALERT = False
 # Set max. people inside limit. Optimise number below: 10, 50, 100, etc.
 Threshold = 10
 # Threading ON/OFF
-Thread = False
+Thread = True
 # Simple log to log the counting data
 Log = False
 # Auto run/Schedule the software to run at your desired time

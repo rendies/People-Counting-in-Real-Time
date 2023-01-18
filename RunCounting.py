@@ -41,6 +41,21 @@ def video_feed():
 	return Response(generate(),
 					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
+def open_ffmpeg_stream_process(height, width):
+	# args = (
+	#     "ffmpeg -re -stream_loop -1 -f rawvideo -pix_fmt "
+	#     "rgb24 -s 1920x1080 -i pipe:0 -pix_fmt yuv420p "
+	#     "-f rtsp rtsp://172.23.90.205:8554/stream"
+	# ).split()
+	args = (
+			"ffmpeg -re -stream_loop -1 -f rawvideo -vcodec rawvideo -pix_fmt "
+			"rgb24 -s " + str(width) + "x" + str(height) + " -i pipe:0 -pix_fmt nv12 "
+			"-c:v libx264 -preset fast -crf 22 -bf 0 "
+			"-f rtsp -rtsp_transport tcp rtsp://172.17.2.39/counter"
+
+	).split()
+	return subprocess.Popen(args, stdin=subprocess.PIPE)
+
 def PeopleCounter():
 	global outputFrame, lock, people_count
 	# construct the argument parse and parse the arguments
@@ -110,7 +125,9 @@ def PeopleCounter():
 
 	if config.Thread:
 		vs = thread.ThreadingClass(config.url)
-
+	ret, frame = vs.read()
+	height, width, ch = frame.shape
+	ffmpeg_process = open_ffmpeg_stream_process(height, width)
 	# loop over frames from the video stream
 	while True:
 		# grab the next frame and handle if we are reading from either
@@ -328,7 +345,8 @@ def PeopleCounter():
 
 		# show the output frame
 		with lock:
-			outputFrame = frame.copy()
+			ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
+			# outputFrame = frame.copy()
 		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
 		key = cv2.waitKey(1) & 0xFF
 
