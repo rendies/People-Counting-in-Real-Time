@@ -34,13 +34,13 @@ def counter():
 	global people_count
 	return jsonify([ 1000, 980, 700, 500, 670, 567, people_count ])
 
-@app.route("/video")
-@cross_origin()
-def video_feed():
-	# return the response generated along with the specific media
-	# type (mime type)
-	return Response(generate(),
-					mimetype = "multipart/x-mixed-replace; boundary=frame")
+# @app.route("/video")
+# @cross_origin()
+# def video_feed():
+# 	# return the response generated along with the specific media
+# 	# type (mime type)
+# 	return Response(generate(),
+# 					mimetype = "multipart/x-mixed-replace; boundary=frame")
 
 def open_ffmpeg_stream_process(height, width):
 	# args = (
@@ -343,8 +343,8 @@ def PeopleCounter():
 			writer.write(frame)
 
 		# show the output frame
-		with lock:
-			ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
+		# with lock:
+		ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
 
 			# outputFrame = frame.copy()
 		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
