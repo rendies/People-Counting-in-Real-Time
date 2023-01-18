@@ -15,7 +15,6 @@ from flask import Flask
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 import subprocess
-import ffmpeg
 
 t0 = time.time()
 
@@ -346,7 +345,6 @@ def PeopleCounter():
 		# show the output frame
 		# with lock:
 		ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
-		ffmpeg_process.communicate()
 
 			# outputFrame = frame.copy()
 		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
@@ -387,6 +385,8 @@ def PeopleCounter():
 		vs.release()
 
 	# close any open windows
+	ffmpeg_process.stdin.close()
+	ffmpeg_process.wait()
 	cv2.destroyAllWindows()
 
 def generate():
