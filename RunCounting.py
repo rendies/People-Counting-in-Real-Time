@@ -126,7 +126,7 @@ def PeopleCounter():
 
 	if config.Thread:
 		vs = thread.ThreadingClass(config.url)
-	ffmpeg_process = open_ffmpeg_stream_process(1920, 1080)
+	ffmpeg_process = open_ffmpeg_stream_process(1080, 1920)
 	# loop over frames from the video stream
 	while True:
 		# grab the next frame and handle if we are reading from either
