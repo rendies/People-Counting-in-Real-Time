@@ -344,8 +344,9 @@ def PeopleCounter():
 			writer.write(frame)
 
 		# show the output frame
-		with lock:
-			ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
+
+		ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
+		# with lock:
 			# outputFrame = frame.copy()
 		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
 		key = cv2.waitKey(1) & 0xFF
