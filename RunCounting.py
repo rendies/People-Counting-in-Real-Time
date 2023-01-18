@@ -125,9 +125,7 @@ def PeopleCounter():
 
 	if config.Thread:
 		vs = thread.ThreadingClass(config.url)
-	ret, frame = vs.read()
-	height, width, ch = frame.shape
-	ffmpeg_process = open_ffmpeg_stream_process(height, width)
+	ffmpeg_process = open_ffmpeg_stream_process(1920, 1080)
 	# loop over frames from the video stream
 	while True:
 		# grab the next frame and handle if we are reading from either
@@ -344,9 +342,9 @@ def PeopleCounter():
 			writer.write(frame)
 
 		# show the output frame
+		with lock:
+			ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
 
-		ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
-		# with lock:
 			# outputFrame = frame.copy()
 		# cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
 		key = cv2.waitKey(1) & 0xFF
