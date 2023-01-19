@@ -49,7 +49,7 @@ def open_ffmpeg_stream_process(height, width):
 	#     "-f rtsp rtsp://172.23.90.205:8554/stream"
 	# ).split()
 	args = (
-			"ffmpeg -re -stream_loop -1 -f rawvideo -vcodec rawvideo -pix_fmt "
+			"ffmpeg -hwaccel cuda -re -stream_loop -1 -f rawvideo -vcodec rawvideo -pix_fmt "
 			"rgb24 -s " + str(width) + "x" + str(height) + " -i pipe:0 -pix_fmt nv12 "
 			"-c:v libx264 -preset fast -crf 22 -bf 0 "
 			"-f rtsp -rtsp_transport tcp rtsp://172.17.2.39/counter"
@@ -344,6 +344,7 @@ def PeopleCounter():
 
 		# show the output frame
 		# with lock:
+		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 		ffmpeg_process.stdin.write(frame.astype(np.uint8).tobytes())
 
 			# outputFrame = frame.copy()
